@@ -11,7 +11,7 @@ import java.net.URL;
 public class VentanaMenuPrincipal extends JFrame {
 
     public static final String NOMBRE_MODULO = "Notificación de pedidos procesados";
-    private static final String NOMBRE_ALUMNO = "Ernesto Velázquez Velázquez";
+    public static final String NOMBRE_ALUMNO = "Ernesto Velázquez Velázquez";
     private static final String RUTA_IMAGEN = "/imagenes/notificacion.png";
     private static final int ANCHO_MAX_IMAGEN = 400;
     private static final int ALTO_MAX_IMAGEN = 280;

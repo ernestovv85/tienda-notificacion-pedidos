@@ -3,6 +3,8 @@ package mx.unadm.dpo3_u2_a2_ervv.vista;
 import javax.swing.*;
 import java.awt.*;
 
+import mx.unadm.dpo3_u2_a2_ervv.hilo.HiloNotificacionPedidos;
+
 public class FormularioNotificacion extends JDialog {
 
     private static final int MAX_PEDIDOS = 20;
@@ -13,6 +15,7 @@ public class FormularioNotificacion extends JDialog {
     private final JButton btnLimpiar = new JButton("Limpiar");
     private final JTextArea txtMensajes = new JTextArea(16, 60);
     private final JProgressBar barraProgreso = new JProgressBar(0, 100);
+    private HiloNotificacionPedidos hilo;
 
     public FormularioNotificacion(JFrame propietario) {
         super(propietario, "Módulo: " + VentanaMenuPrincipal.NOMBRE_MODULO, false);
@@ -103,9 +106,27 @@ public class FormularioNotificacion extends JDialog {
             return;
         }
 
-        // Paso 5: aquí se creará e iniciará el hilo HiloNotificacionPedidos
-        agregarMensaje("[" + Thread.currentThread().getName() + "] Datos válidos -> cliente: "
-                + cliente + ", pedidos: " + cantidad);
+        if (hilo != null && hilo.isAlive()) {
+            return; // Ya hay una tarea en ejecución
+        }
+
+        txtMensajes.setText("");
+        barraProgreso.setValue(0);
+        establecerEnEjecucion(true);
+
+        hilo = new HiloNotificacionPedidos(cliente, cantidad, this);
+        hilo.start(); // start() crea el nuevo flujo; run() directo se ejecutaría en el EDT
+
+        agregarMensaje("[" + Thread.currentThread().getName() + "] Se inició '" + hilo.getName()
+                + "'. La interfaz sigue disponible.");
+    }
+
+    @Override
+    public void dispose() {
+        if (hilo != null && hilo.isAlive()) {
+            hilo.interrupt();
+        }
+        super.dispose();
     }
 
     private void limpiar() {
