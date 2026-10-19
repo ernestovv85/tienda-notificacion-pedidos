@@ -1,19 +1,27 @@
 package mx.unadm.dpo3_u2_a2_ervv;
 
+import mx.unadm.dpo3_u2_a2_ervv.vista.VentanaMenuPrincipal;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+
+import javax.swing.*;
 
 @SpringBootApplication
 public class NotificacionPedidosApplication {
 
 	public static void main(String[] args) {
-		// Spring Boot arranca en modo headless por defecto; Swing necesita que sea false
 		new SpringApplicationBuilder(NotificacionPedidosApplication.class)
 				.headless(false)
 				.run(args);
 
 		System.out.println("[" + Thread.currentThread().getName() + "] Aplicación iniciada.");
 
-		// En el siguiente paso aquí se abrirá la ventana principal
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
+			System.err.println("No se pudo aplicar el Look and Feel del sistema: " + e.getMessage());
+		}
+
+		SwingUtilities.invokeLater(() -> new VentanaMenuPrincipal().setVisible(true));
 	}
 }
