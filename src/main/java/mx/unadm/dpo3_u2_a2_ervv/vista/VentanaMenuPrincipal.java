@@ -15,6 +15,7 @@ public class VentanaMenuPrincipal extends JFrame {
     private static final String RUTA_IMAGEN = "/imagenes/notificacion.png";
     private static final int ANCHO_MAX_IMAGEN = 400;
     private static final int ALTO_MAX_IMAGEN = 280;
+    private FormularioNotificacion formulario;
 
     public VentanaMenuPrincipal() {
         super(NOMBRE_MODULO + " - " + NOMBRE_ALUMNO);
@@ -107,7 +108,11 @@ public class VentanaMenuPrincipal extends JFrame {
     }
 
     private void abrirModulo() {
-        JOptionPane.showMessageDialog(this, "El formulario del módulo se implementa en el siguiente paso.");
+        if (formulario == null || !formulario.isDisplayable()) {
+            formulario = new FormularioNotificacion(this);
+        }
+        formulario.setVisible(true);
+        formulario.toFront();
     }
 
     private void salir() {
